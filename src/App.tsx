@@ -3,22 +3,27 @@ import todoService from "./services/todo.service";
 
 
 function App() {
-  const { isLoading, error, data } = useQuery({
+  const { status, isLoading, error, data } = useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
       const response = await todoService.getAll();
       return response.data;
     },
   });
+
+  if (status === 'pending') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'error') {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div>
-      {/*error && <div>{error}</div>*/}
-
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : data?.length ? (
+      {data?.length ? (
         data.map(todo => (
-          <div><b>{todo.id}:</b>{todo.title}</div>
+          <div key={todo.id}><b>{todo.id}:</b>{todo.title}</div>
         ))
       ) : (
         <h1>Data not found!</h1>
