@@ -1,16 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { ITodo } from "./app.interface";
+import todoService from "./services/todo.service";
 
-const todoId = 1;
 
 function App() {
   const { isLoading, error, data } = useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
-      const response = await axios.get<ITodo>(
-        "https://jsonplaceholder.typicode.com/todos/1"
-      );
+      const response = await todoService.getAll();
       return response.data;
     },
   });
@@ -20,8 +16,10 @@ function App() {
 
       {isLoading ? (
         <div>Loading...</div>
-      ) : data ? (
-        <h1>Todo: {data.title}</h1>
+      ) : data?.length ? (
+        data.map(todo => (
+          <div><b>{todo.id}:</b>{todo.title}</div>
+        ))
       ) : (
         <h1>Data not found!</h1>
       )}
@@ -29,4 +27,4 @@ function App() {
   );
 }
 
-export default App;
+export { App }
