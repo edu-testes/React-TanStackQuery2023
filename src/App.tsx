@@ -15,7 +15,17 @@ function App() {
     },
   });
   return (
-    <div>{data ? <h1>Todo: {data.title}</h1> : <h1>Data not found!</h1>}</div>
+    <div>
+      {/*error && <div>{error}</div>*/}
+
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : data ? (
+        <h1>Todo: {data.title}</h1>
+      ) : (
+        <h1>Data not found!</h1>
+      )}
+      </div>
   );
 }
 
